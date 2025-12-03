@@ -1,0 +1,182 @@
+[
+  {
+    "name": "African Basil",
+    "local_name": "Efirin ogede",
+    "uses": ["Fever", "Cough", "Body Ache"],
+    "notes": "Leaves can be boiled for tea."
+  },
+  {
+    "name": "Ginger",
+    "local_name": "Atale",
+    "uses": ["Headache", "Stomach Pain", "Nausea"],
+    "notes": "Fresh or powdered forms can be used. Avoid very high doses."
+  },
+  {
+    "name": "Scent Leaf",
+    "local_name": "Efirin",
+    "uses": ["Cough", "Cold", "Respiratory Issues"],
+    "notes": "Leaves can be used in soups or brewed as tea."
+  },
+  {
+    "name": "Bitter Leaf",
+    "local_name": "Ewuro",
+    "uses": ["Malaria", "Fever", "Digestive Issues"],
+    "notes": "Boil before use. Usually taken as tea or soup."
+  },
+  {
+    "name": "Neem Bark",
+    "local_name": "Dogonyaro bark",
+    "uses": ["Fever", "Skin Infections", "Anti-microbial"],
+    "notes": "Used as decoction. Avoid excessive intake."
+  },
+  {
+    "name": "Hausa Potato",
+    "local_name": "Alubosa",
+    "uses": ["Fever", "Cough", "Stomach Pain"],
+    "notes": "Roots used in decoctions."
+  },
+  {
+    "name": "Garlic",
+    "local_name": "Alubosa ajo",
+    "uses": ["Blood Pressure", "Immune Booster", "Body Ache"],
+    "notes": "Can be eaten raw, cooked, or in capsules."
+  },
+  {
+    "name": "Moringa",
+    "local_name": "Zogale",
+    "uses": ["Fatigue", "Weakness", "Headache"],
+    "notes": "Leaves can be eaten fresh or powdered. Avoid excessive consumption."
+  },
+  {
+    "name": "Tamarind",
+    "local_name": "Awin",
+    "uses": ["Stomach Pain", "Fever", "Cough"],
+    "notes": "Pulp used for juice or decoction."
+  },
+  {
+    "name": "Turmeric",
+    "local_name": "Atale pupa",
+    "uses": ["Inflammation", "Body Ache", "Joint Pain"],
+    "notes": "Root or powder can be added to meals or drinks."
+  },
+  {
+    "name": "Aloe Vera",
+    "local_name": "Eti-erin",
+    "uses": ["Skin Rash", "Wound Healing", "Stomach Ulcer"],
+    "notes": "Gel applied to skin or mixed carefully with water."
+  },
+  {
+    "name": "Clove",
+    "local_name": "Kanafuru",
+    "uses": ["Toothache", "Cough", "Cold"],
+    "notes": "Can be chewed or boiled for tea."
+  },
+  {
+    "name": "Onion",
+    "local_name": "Alubosa elewe",
+    "uses": ["Cold", "Fever", "Cough"],
+    "notes": "Can be eaten raw or added to tea."
+  },
+  {
+    "name": "Lemon Grass",
+    "local_name": "Irun oorun",
+    "uses": ["Fever", "Stress", "Sleep Problems"],
+    "notes": "Boil leaves to make tea."
+  },
+  {
+    "name": "Black Seed",
+    "local_name": "Habbatul barakah",
+    "uses": ["Asthma", "Cough", "Immune Support"],
+    "notes": "Crushed and mixed with honey."
+  },
+  {
+    "name": "Mint",
+    "local_name": "Na’a na’a",
+    "uses": ["Headache", "Nausea", "Cold"],
+    "notes": "Brew in hot water or chew fresh."
+  },
+  {
+    "name": "Fluted Pumpkin Leaves",
+    "local_name": "Ugu",
+    "uses": ["Anemia", "Fatigue", "Weakness"],
+    "notes": "Used in soups or as juice."
+  },
+  {
+    "name": "Baobab",
+    "local_name": "Kuka",
+    "uses": ["Stomach Issues", "Fever", "Diarrhea"],
+    "notes": "Leaves or fruit used in soups or drinks."
+  },
+  {
+    "name": "Cashew Leaves",
+    "local_name": "Kaju",
+    "uses": ["Diarrhea", "Infection", "Malaria"],
+    "notes": "Boil leaves for tea."
+  },
+  {
+    "name": "Bamboo Leaves",
+    "local_name": "Oparun",
+    "uses": ["Fever", "Body Pain", "Cold"],
+    "notes": "Boil leaves and drink as tea."
+  },
+  {
+    "name": "Guava Leaves",
+    "local_name": "Gova",
+    "uses": ["Diarrhea", "Stomach Pain", "Infection"],
+    "notes": "Boil for tea."
+  },
+  {
+    "name": "Pawpaw Leaves",
+    "local_name": "Ibepe",
+    "uses": ["Malaria", "Fever", "Digestive Issues"],
+    "notes": "Boil and drink liquid."
+  },
+  {
+    "name": "Coconut Oil",
+    "local_name": "Epo agbon",
+    "uses": ["Skin Problems", "Joint Pain", "Hair Health"],
+    "notes": "Can be applied to skin or consumed in small quantities."
+  },
+  {
+    "name": "Shea Butter",
+    "local_name": "Ori",
+    "uses": ["Skin Healing", "Rashes", "Joint Pain"],
+    "notes": "Apply directly to skin."
+  },
+  {
+    "name": "Water Leaf",
+    "local_name": "Gbure",
+    "uses": ["Weakness", "Fever", "Anemia"],
+    "notes": "Used in soups."
+  },
+  {
+    "name": "Senna Leaves",
+    "local_name": "Asunwon",
+    "uses": ["Constipation", "Detox"],
+    "notes": "Use with caution, acts as a laxative."
+  },
+  {
+    "name": "Alligator Pepper",
+    "local_name": "Atare",
+    "uses": ["Cold", "Cough", "Stomach Pain"],
+    "notes": "Chewed raw or added to preparations."
+  },
+  {
+    "name": "Fennel",
+    "local_name": "Sweet Anise",
+    "uses": ["Gas", "Bloating", "Indigestion"],
+    "notes": "Brew into tea."
+  },
+  {
+    "name": "Hibiscus",
+    "local_name": "Zobo",
+    "uses": ["High Blood Pressure", "Fever", "Detox"],
+    "notes": "Used as drink or tea."
+  },
+  {
+    "name": "Camwood",
+    "local_name": "Osun",
+    "uses": ["Skin Problems", "Inflammation", "Rashes"],
+    "notes": "Used as paste or mixed with water."
+  }
+]
