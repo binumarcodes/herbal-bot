@@ -89,21 +89,22 @@ export default function ChatPage({ user, chat, setChat, logout }: ChatPageProps)
   };
 
   // Handle sending a message
-  const handleSend = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!message.trim()) return;
+const handleSend = (e: React.FormEvent) => {
+  e.preventDefault();
+  if (!message.trim()) return;
 
-    const userMsg: ChatMessage = { sender: "user", text: message };
-    setChat(prev => [...prev, userMsg]);
-    setMessage("");
-    setTyping(true);
+  const userMsg: ChatMessage = { sender: "user", text: message };
+  setChat(prev => [...prev, userMsg]);
+  setMessage("");
+  setTyping(true);
 
-    setTimeout(() => {
-      const botResponse = generateBotResponse(message);
-      setChat(prev => [...prev, { sender: "bot", text: botResponse }]);
-      setTyping(false);
-    }, 1000 + Math.random() * 1000);
-  };
+  setTimeout(() => {
+    const botResponse = generateBotResponse(message);
+    setChat(prev => [...prev, { sender: "bot", text: botResponse }]);
+    setTyping(false);
+  }, 1000 + Math.random() * 1000);
+};
+
 
   return (
     <div style={{ display: "flex", flexDirection: "column", height: "100vh", backgroundColor: "#f0fdf4" }}>
