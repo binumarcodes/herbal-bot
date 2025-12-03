@@ -28,42 +28,53 @@ export default function Navbar({ user, loggedIn, setLoggedIn, setShowWelcome }: 
     padding: isMobile ? "0.75rem 1rem" : "1rem 2rem",
     boxShadow: "0 1px 3px rgba(0,0,0,0.1)",
     position: "relative",
+    zIndex: 20,
   };
 
   const linkStyle: React.CSSProperties = {
     color: "white",
-    marginRight: isMobile ? 0 : "1rem",
     textDecoration: "none",
     fontSize: isMobile ? "0.95rem" : "1rem",
-    padding: isMobile ? "0.5rem 0" : 0,
+    padding: isMobile ? "0.5rem 0" : undefined,
+    marginRight: isMobile ? 0 : "1rem",
   };
 
   const navLinks = (
-    <div style={{
-      display: isMobile ? (menuOpen ? "flex" : "none") : "flex",
-      flexDirection: isMobile ? "column" : "row",
-      position: isMobile ? "absolute" : "static",
-      top: isMobile ? "100%" : undefined,
-      right: isMobile ? 0 : undefined,
-      backgroundColor: isMobile ? "#16a34a" : undefined,
-      width: isMobile ? "100%" : "auto",
-      padding: isMobile ? "1rem" : undefined,
-      zIndex: 10,
-      gap: isMobile ? "0.5rem" : "0.5rem",
-      alignItems: isMobile ? "flex-start" : "center",
-    }}>
-      <a href="#" style={linkStyle} onClick={() => setShowWelcome(true)}>Home</a>
-      <a href="#" style={linkStyle}>Herbs</a>
-      <a href="#" style={linkStyle}>Chat</a>
-      <a href="#" style={linkStyle}>About</a>
+    <div
+      style={{
+        display: isMobile ? (menuOpen ? "flex" : "none") : "flex",
+        flexDirection: isMobile ? "column" : "row",
+        position: isMobile ? "absolute" : "static",
+        top: isMobile ? "100%" : undefined,
+        right: isMobile ? 0 : undefined,
+        backgroundColor: isMobile ? "#16a34a" : undefined,
+        width: isMobile ? "100%" : "auto",
+        padding: isMobile ? "1rem" : undefined,
+        gap: "0.5rem",
+        alignItems: isMobile ? "flex-start" : "center",
+      }}
+    >
+      <a href="#" style={linkStyle} onClick={() => { setShowWelcome(true); setMenuOpen(false); }}>Home</a>
+      <a href="#" style={linkStyle} onClick={() => setMenuOpen(false)}>Herbs</a>
+      <a href="#" style={linkStyle} onClick={() => setMenuOpen(false)}>Chat</a>
+      <a href="#" style={linkStyle} onClick={() => setMenuOpen(false)}>About</a>
       {!loggedIn ? (
-        <button style={buttonStyle} onClick={() => setShowWelcome(false)}>Login</button>
+        <button style={buttonStyle} onClick={() => { setShowWelcome(false); setMenuOpen(false); }}>
+          Login
+        </button>
       ) : (
         <>
           <span style={{ margin: isMobile ? "0.5rem 0" : "0", fontSize: isMobile ? "0.95rem" : "1rem" }}>
             Hi, {user}
           </span>
-          <button style={buttonStyle} onClick={() => { setLoggedIn(false); setShowWelcome(true); }}>
+          <button
+            style={buttonStyle}
+            onClick={() => {
+              setLoggedIn(false);
+              setShowWelcome(true);
+              setMenuOpen(false);
+            }}
+          >
             Logout
           </button>
         </>
@@ -89,6 +100,7 @@ export default function Navbar({ user, loggedIn, setLoggedIn, setShowWelcome }: 
               fontSize: "1.5rem",
               cursor: "pointer",
             }}
+            aria-label="Toggle Menu"
           >
             ☰
           </button>

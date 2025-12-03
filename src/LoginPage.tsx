@@ -3,11 +3,12 @@ import { useState, useEffect } from "react";
 type LoginProps = {
   user: string;
   setUser: (value: string) => void;
-  setLoggedIn: () => void;
+  setLoggedIn: (username: string, email: string) => void; // updated type
   switchToSignup: () => void;
 };
 
 export default function LoginPage({ user, setUser, setLoggedIn, switchToSignup }: LoginProps) {
+  const [password, setPassword] = useState(""); // optional, demo purpose
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
   useEffect(() => {
@@ -74,7 +75,10 @@ export default function LoginPage({ user, setUser, setLoggedIn, switchToSignup }
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    if (user.trim()) setLoggedIn();
+    if (user.trim() && password.trim()) {
+      // In a real app, verify credentials
+      setLoggedIn(user, `${user}@example.com`); // pass username and email
+    }
   };
 
   return (
@@ -95,7 +99,13 @@ export default function LoginPage({ user, setUser, setLoggedIn, switchToSignup }
 
           <div>
             <label style={labelStyle}>Password</label>
-            <input type="password" placeholder="Enter your password" style={inputStyle} />
+            <input
+              type="password"
+              placeholder="Enter your password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              style={inputStyle}
+            />
           </div>
 
           <button type="submit" style={buttonStyle}>Login</button>

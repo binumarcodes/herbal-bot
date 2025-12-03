@@ -6,21 +6,28 @@ import ChatPage from "./ChatPage";
 import Dashboard from "./DashboardPage";
 import Navbar from "./Navbar";
 
+// Define Page type
 type Page = "welcome" | "signup" | "login" | "dashboard" | "chat";
+
+// Define ChatMessage type
+export type ChatMessage = {
+  sender: "user" | "bot";
+  text: string;
+};
 
 export default function App() {
   const [currentPage, setCurrentPage] = useState<Page>("welcome");
   const [user, setUser] = useState("");
   const [userEmail, setUserEmail] = useState(""); // store user email
   const [loginTime, setLoginTime] = useState<Date | null>(null); // store login timestamp
-  const [chat, setChat] = useState<string[]>([]);
+  const [chat, setChat] = useState<ChatMessage[]>([]); // ChatMessage array
 
   // When user logs in successfully
   const setLoggedIn = (username: string, email: string) => {
     setUser(username);
     setUserEmail(email);
     setLoginTime(new Date());
-    setCurrentPage("dashboard"); // now goes to dashboard first
+    setCurrentPage("dashboard"); // go to dashboard first
   };
 
   const logout = () => {
@@ -39,8 +46,9 @@ export default function App() {
       {showNavbar && (
         <Navbar
           user={user}
-          onLoginClick={() => setCurrentPage("login")}
-          onLogoutClick={logout}
+          loggedIn={!!user}
+          setLoggedIn={(val) => !val && logout()}
+          setShowWelcome={(val) => val && setCurrentPage("welcome")}
         />
       )}
 
@@ -51,7 +59,7 @@ export default function App() {
 
       {currentPage === "signup" && (
         <SignupPage
-          setLoggedIn={(email: string) => setLoggedIn(user, email)}
+          setLoggedIn={() => setLoggedIn(user, userEmail)}
           switchToLogin={() => setCurrentPage("login")}
         />
       )}
@@ -60,7 +68,7 @@ export default function App() {
         <LoginPage
           user={user}
           setUser={setUser}
-          setLoggedIn={(email: string) => setLoggedIn(user, email)}
+          setLoggedIn={() => setLoggedIn(user, userEmail)}
           switchToSignup={() => setCurrentPage("signup")}
         />
       )}

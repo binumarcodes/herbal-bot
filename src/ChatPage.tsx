@@ -8,7 +8,7 @@ type Herb = {
   notes: string;
 };
 
-type ChatMessage = {
+export type ChatMessage = {
   sender: "user" | "bot";
   text: string;
 };
@@ -26,22 +26,26 @@ export default function ChatPage({ user, chat, setChat, logout }: ChatPageProps)
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const chatEndRef = useRef<HTMLDivElement>(null);
 
+  const isMobile = windowWidth < 768;
+
+  // Handle resize for mobile responsiveness
   useEffect(() => {
     const handleResize = () => setWindowWidth(window.innerWidth);
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const isMobile = windowWidth < 768;
-
+  // Scroll to bottom when chat changes
   const scrollToBottom = () => chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
   useEffect(() => scrollToBottom(), [chat, typing]);
 
+  // Greeting detection
   const isGreeting = (text: string) => {
     const greetings = ["hello", "hi", "hey", "good morning", "good afternoon", "good evening"];
     return greetings.some(g => text.toLowerCase().includes(g));
   };
 
+  // Symptom search
   const searchHerbsBySymptom = (query: string) => {
     const lower = query.toLowerCase();
     return (herbData as Herb[]).filter(h =>
@@ -49,6 +53,7 @@ export default function ChatPage({ user, chat, setChat, logout }: ChatPageProps)
     );
   };
 
+  // Generate bot response
   const generateBotResponse = (userInput: string) => {
     const lowerInput = userInput.toLowerCase();
 
@@ -83,6 +88,7 @@ export default function ChatPage({ user, chat, setChat, logout }: ChatPageProps)
     return fallbackReplies[Math.floor(Math.random() * fallbackReplies.length)];
   };
 
+  // Handle sending a message
   const handleSend = (e: React.FormEvent) => {
     e.preventDefault();
     if (!message.trim()) return;

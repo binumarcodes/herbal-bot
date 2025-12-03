@@ -20,8 +20,8 @@ const symptoms = [
 ];
 
 export default function DashboardPage({ user, email, loginTime, goToChat, logout }: DashboardProps) {
-  const [selectedSymptom, setSelectedSymptom] = useState("");
-  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  const [selectedSymptom, setSelectedSymptom] = useState<string>("");
+  const [windowWidth, setWindowWidth] = useState<number>(window.innerWidth);
 
   useEffect(() => {
     const handleResize = () => setWindowWidth(window.innerWidth);
@@ -98,7 +98,7 @@ export default function DashboardPage({ user, email, loginTime, goToChat, logout
               width: "100%",
               borderRadius: "0.5rem",
               border: "1px solid #d1fae5",
-              marginBottom: "1rem"
+              marginBottom: "1rem",
             }}
           >
             <option value="">-- Select Symptom --</option>
@@ -170,7 +170,7 @@ export default function DashboardPage({ user, email, loginTime, goToChat, logout
                 borderRadius: "0.5rem",
                 cursor: "pointer",
                 fontWeight: "bold",
-                width: isMobile ? "100%" : "auto"
+                width: isMobile ? "100%" : "auto",
               }}
             >
               Open Chat 💬
@@ -186,7 +186,7 @@ export default function DashboardPage({ user, email, loginTime, goToChat, logout
                 borderRadius: "0.5rem",
                 cursor: "pointer",
                 fontWeight: "bold",
-                width: isMobile ? "100%" : "auto"
+                width: isMobile ? "100%" : "auto",
               }}
             >
               Logout

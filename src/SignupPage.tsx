@@ -1,30 +1,46 @@
+import { useState, useEffect } from "react";
+
 type SignupProps = {
-  setLoggedIn: () => void;
+  setLoggedIn: (username: string, email: string) => void; // updated type
   switchToLogin: () => void;
 };
 
 export default function SignupPage({ setLoggedIn, switchToLogin }: SignupProps) {
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+
+  useEffect(() => {
+    const handleResize = () => setWindowWidth(window.innerWidth);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  const isMobile = windowWidth < 768;
+
   const containerStyle: React.CSSProperties = {
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
     justifyContent: "center",
     minHeight: "100vh",
-    padding: "2rem",
+    padding: isMobile ? "1rem" : "2rem",
     backgroundColor: "#f3f4f6",
     gap: "1rem",
   };
 
   const cardStyle: React.CSSProperties = {
     backgroundColor: "white",
-    padding: "2rem",
+    padding: isMobile ? "1.5rem" : "2rem",
     borderRadius: "0.75rem",
     boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
     display: "flex",
     flexDirection: "column",
     gap: "1.5rem",
     width: "100%",
-    maxWidth: "400px", // scales down for mobile
+    maxWidth: "400px",
   };
 
   const labelStyle: React.CSSProperties = {
@@ -36,7 +52,7 @@ export default function SignupPage({ setLoggedIn, switchToLogin }: SignupProps) 
   };
 
   const inputStyle: React.CSSProperties = {
-    padding: "0.7rem 1rem",
+    padding: isMobile ? "0.6rem 0.8rem" : "0.7rem 1rem",
     border: "1px solid #d1d5db",
     borderRadius: "0.5rem",
     fontSize: "clamp(0.9rem, 2.5vw, 1rem)",
@@ -45,7 +61,7 @@ export default function SignupPage({ setLoggedIn, switchToLogin }: SignupProps) 
   };
 
   const buttonStyle: React.CSSProperties = {
-    padding: "0.7rem 1rem",
+    padding: isMobile ? "0.6rem 0.8rem" : "0.7rem 1rem",
     fontSize: "clamp(0.95rem, 2.5vw, 1rem)",
     backgroundColor: "#16a34a",
     color: "white",
@@ -59,7 +75,13 @@ export default function SignupPage({ setLoggedIn, switchToLogin }: SignupProps) 
 
   const handleSignup = (e: React.FormEvent) => {
     e.preventDefault();
-    setLoggedIn();
+    if (!username.trim() || !email.trim() || !password.trim()) return;
+    if (password !== confirmPassword) {
+      alert("Passwords do not match!");
+      return;
+    }
+
+    setLoggedIn(username, email); // call parent with username and email
   };
 
   return (
@@ -71,22 +93,46 @@ export default function SignupPage({ setLoggedIn, switchToLogin }: SignupProps) 
         <form style={{ display: "flex", flexDirection: "column", gap: "1rem" }} onSubmit={handleSignup}>
           <div>
             <label style={labelStyle}>Username</label>
-            <input type="text" placeholder="Enter your username" style={inputStyle} />
+            <input
+              type="text"
+              placeholder="Enter your username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              style={inputStyle}
+            />
           </div>
 
           <div>
             <label style={labelStyle}>Email</label>
-            <input type="email" placeholder="Enter your email" style={inputStyle} />
+            <input
+              type="email"
+              placeholder="Enter your email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              style={inputStyle}
+            />
           </div>
 
           <div>
             <label style={labelStyle}>Password</label>
-            <input type="password" placeholder="Enter your password" style={inputStyle} />
+            <input
+              type="password"
+              placeholder="Enter your password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              style={inputStyle}
+            />
           </div>
 
           <div>
             <label style={labelStyle}>Confirm Password</label>
-            <input type="password" placeholder="Confirm your password" style={inputStyle} />
+            <input
+              type="password"
+              placeholder="Confirm your password"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              style={inputStyle}
+            />
           </div>
 
           <button type="submit" style={buttonStyle}>Sign Up</button>
