@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 type DashboardProps = {
   user: string;
@@ -21,13 +21,23 @@ const symptoms = [
 
 export default function DashboardPage({ user, email, loginTime, goToChat, logout }: DashboardProps) {
   const [selectedSymptom, setSelectedSymptom] = useState("");
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+
+  useEffect(() => {
+    const handleResize = () => setWindowWidth(window.innerWidth);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  const isMobile = windowWidth < 768;
 
   return (
     <div
       style={{
         minHeight: "100vh",
         background: "linear-gradient(180deg, #ecfdf5, #f0fdf4)",
-        padding: "2rem",
+        padding: "1.5rem",
+        boxSizing: "border-box",
       }}
     >
       <h1 style={{ color: "#166534", marginBottom: "0.5rem" }}>
@@ -35,17 +45,17 @@ export default function DashboardPage({ user, email, loginTime, goToChat, logout
       </h1>
 
       {/* User Info */}
-      <div style={{ marginBottom: "2rem", color: "#4b5563" }}>
+      <div style={{ marginBottom: "1.5rem", color: "#4b5563" }}>
         <p>Welcome back, <strong>{user}</strong> 👋</p>
-        {/* <p>Email: <strong>{email}</strong></p> */}
+        <p>Email: <strong>{email}</strong></p>
         <p>Signed in at: <strong>{loginTime.toLocaleString()}</strong></p>
       </div>
 
-      {/* Top cards */}
+      {/* Top Stats */}
       <div
         style={{
           display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))",
+          gridTemplateColumns: isMobile ? "1fr" : "repeat(auto-fit, minmax(180px, 1fr))",
           gap: "1rem",
           marginBottom: "2rem",
         }}
@@ -59,16 +69,15 @@ export default function DashboardPage({ user, email, loginTime, goToChat, logout
       <div
         style={{
           display: "grid",
-          gridTemplateColumns: "1.2fr 1fr",
-          gap: "2rem",
-          alignItems: "flex-start",
+          gridTemplateColumns: isMobile ? "1fr" : "1.2fr 1fr",
+          gap: "1.5rem",
         }}
       >
-        {/* Left Section: Symptom Selector */}
+        {/* Symptom Selector */}
         <div
           style={{
             background: "white",
-            padding: "2rem",
+            padding: "1.5rem",
             borderRadius: "1rem",
             boxShadow: "0 4px 12px rgba(0,0,0,0.08)",
           }}
@@ -78,7 +87,7 @@ export default function DashboardPage({ user, email, loginTime, goToChat, logout
           </h2>
 
           <p style={{ color: "#555", marginBottom: "1rem" }}>
-            Choose a symptom and let HerbalBot recommend the best local herbs for you.
+            Choose a symptom and let HerbalBot recommend the best local herbs.
           </p>
 
           <select
@@ -89,14 +98,12 @@ export default function DashboardPage({ user, email, loginTime, goToChat, logout
               width: "100%",
               borderRadius: "0.5rem",
               border: "1px solid #d1fae5",
-              marginBottom: "1.2rem"
+              marginBottom: "1rem"
             }}
           >
             <option value="">-- Select Symptom --</option>
             {symptoms.map((symptom, index) => (
-              <option key={index} value={symptom}>
-                {symptom}
-              </option>
+              <option key={index} value={symptom}>{symptom}</option>
             ))}
           </select>
 
@@ -131,11 +138,11 @@ export default function DashboardPage({ user, email, loginTime, goToChat, logout
           </button>
         </div>
 
-        {/* Right Section: Popular Herbs */}
+        {/* Popular Herbs */}
         <div
           style={{
             background: "white",
-            padding: "2rem",
+            padding: "1.5rem",
             borderRadius: "1rem",
             boxShadow: "0 4px 12px rgba(0,0,0,0.08)",
           }}
@@ -152,7 +159,7 @@ export default function DashboardPage({ user, email, loginTime, goToChat, logout
             <li><strong>Ginger</strong> – Pain, inflammation</li>
           </ul>
 
-          <div style={{ marginTop: "1.5rem", display: "flex", gap: "1rem" }}>
+          <div style={{ marginTop: "1rem", display: "flex", flexDirection: isMobile ? "column" : "row", gap: "0.8rem" }}>
             <button
               onClick={goToChat}
               style={{
@@ -163,6 +170,7 @@ export default function DashboardPage({ user, email, loginTime, goToChat, logout
                 borderRadius: "0.5rem",
                 cursor: "pointer",
                 fontWeight: "bold",
+                width: isMobile ? "100%" : "auto"
               }}
             >
               Open Chat 💬
@@ -178,6 +186,7 @@ export default function DashboardPage({ user, email, loginTime, goToChat, logout
                 borderRadius: "0.5rem",
                 cursor: "pointer",
                 fontWeight: "bold",
+                width: isMobile ? "100%" : "auto"
               }}
             >
               Logout
@@ -194,7 +203,7 @@ function StatCard({ title, value }: { title: string; value: string }) {
     <div
       style={{
         background: "white",
-        padding: "1.2rem",
+        padding: "1rem",
         borderRadius: "0.8rem",
         boxShadow: "0 2px 6px rgba(0,0,0,0.05)",
       }}

@@ -1,3 +1,5 @@
+import { useState, useEffect } from "react";
+
 type NavbarProps = {
   user: string;
   loggedIn: boolean;
@@ -6,38 +8,97 @@ type NavbarProps = {
 };
 
 export default function Navbar({ user, loggedIn, setLoggedIn, setShowWelcome }: NavbarProps) {
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => setWindowWidth(window.innerWidth);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  const isMobile = windowWidth < 768;
+
   const navStyle: React.CSSProperties = {
     backgroundColor: "#16a34a",
     color: "white",
     display: "flex",
     justifyContent: "space-between",
     alignItems: "center",
-    padding: "1rem 2rem",
-    boxShadow: "0 1px 3px rgba(0,0,0,0.1)"
+    padding: isMobile ? "0.75rem 1rem" : "1rem 2rem",
+    boxShadow: "0 1px 3px rgba(0,0,0,0.1)",
+    position: "relative",
   };
 
-  const linkStyle: React.CSSProperties = { color: "white", marginRight: "1rem", textDecoration: "none" };
+  const linkStyle: React.CSSProperties = {
+    color: "white",
+    marginRight: isMobile ? 0 : "1rem",
+    textDecoration: "none",
+    fontSize: isMobile ? "0.95rem" : "1rem",
+    padding: isMobile ? "0.5rem 0" : 0,
+  };
+
+  const navLinks = (
+    <div style={{
+      display: isMobile ? (menuOpen ? "flex" : "none") : "flex",
+      flexDirection: isMobile ? "column" : "row",
+      position: isMobile ? "absolute" : "static",
+      top: isMobile ? "100%" : undefined,
+      right: isMobile ? 0 : undefined,
+      backgroundColor: isMobile ? "#16a34a" : undefined,
+      width: isMobile ? "100%" : "auto",
+      padding: isMobile ? "1rem" : undefined,
+      zIndex: 10,
+      gap: isMobile ? "0.5rem" : "0.5rem",
+      alignItems: isMobile ? "flex-start" : "center",
+    }}>
+      <a href="#" style={linkStyle} onClick={() => setShowWelcome(true)}>Home</a>
+      <a href="#" style={linkStyle}>Herbs</a>
+      <a href="#" style={linkStyle}>Chat</a>
+      <a href="#" style={linkStyle}>About</a>
+      {!loggedIn ? (
+        <button style={buttonStyle} onClick={() => setShowWelcome(false)}>Login</button>
+      ) : (
+        <>
+          <span style={{ margin: isMobile ? "0.5rem 0" : "0", fontSize: isMobile ? "0.95rem" : "1rem" }}>
+            Hi, {user}
+          </span>
+          <button style={buttonStyle} onClick={() => { setLoggedIn(false); setShowWelcome(true); }}>
+            Logout
+          </button>
+        </>
+      )}
+    </div>
+  );
 
   return (
     <header style={navStyle}>
       <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
         <span>🌿</span>
-        <span style={{ fontWeight: "bold", fontSize: "1.25rem" }}>HerbalBot</span>
+        <span style={{ fontWeight: "bold", fontSize: isMobile ? "1rem" : "1.25rem" }}>HerbalBot</span>
       </div>
-      <nav style={{ display: "flex", alignItems: "center" }}>
-        <a href="#" style={linkStyle} onClick={() => setShowWelcome(true)}>Home</a>
-        <a href="#" style={linkStyle}>Herbs</a>
-        <a href="#" style={linkStyle}>Chat</a>
-        <a href="#" style={linkStyle}>About</a>
-        {!loggedIn ? (
-          <button style={buttonStyle} onClick={() => setShowWelcome(false)}>Login</button>
-        ) : (
-          <>
-            <span>Hi, {user}</span>
-            <button style={buttonStyle} onClick={() => { setLoggedIn(false); setShowWelcome(true); }}>Logout</button>
-          </>
-        )}
-      </nav>
+
+      {isMobile ? (
+        <div>
+          <button
+            onClick={() => setMenuOpen(!menuOpen)}
+            style={{
+              background: "none",
+              border: "none",
+              color: "white",
+              fontSize: "1.5rem",
+              cursor: "pointer",
+            }}
+          >
+            ☰
+          </button>
+          {navLinks}
+        </div>
+      ) : (
+        <nav style={{ display: "flex", alignItems: "center" }}>
+          {navLinks}
+        </nav>
+      )}
     </header>
   );
 }
@@ -49,5 +110,5 @@ const buttonStyle: React.CSSProperties = {
   padding: "0.5rem 1rem",
   borderRadius: "0.375rem",
   border: "none",
-  cursor: "pointer"
+  cursor: "pointer",
 };
