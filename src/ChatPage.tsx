@@ -43,7 +43,6 @@ export default function ChatPage({ user, chat, setChat, logout }: ChatPageProps)
   const [pendingSymptom, setPendingSymptom] = useState<string | null>(null);
 
   const chatEndRef = useRef<HTMLDivElement>(null);
-  const isMobile = windowWidth < 768;
 
   /* ---------------- EFFECTS ---------------- */
 

@@ -31,14 +31,6 @@ export default function Navbar({ user, loggedIn, setLoggedIn, setShowWelcome }: 
     zIndex: 20,
   };
 
-  const linkStyle: React.CSSProperties = {
-    color: "white",
-    textDecoration: "none",
-    fontSize: isMobile ? "0.95rem" : "1rem",
-    padding: isMobile ? "0.5rem 0" : undefined,
-    marginRight: isMobile ? 0 : "1rem",
-  };
-
   const navLinks = (
     <div
       style={{
@@ -54,17 +46,13 @@ export default function Navbar({ user, loggedIn, setLoggedIn, setShowWelcome }: 
         alignItems: isMobile ? "flex-start" : "center",
       }}
     >
-      {/* <a href="#" style={linkStyle} onClick={() => { setShowWelcome(true); setMenuOpen(false); }}>Home</a>
-      <a href="#" style={linkStyle} onClick={() => setMenuOpen(false)}>Herbs</a>
-      <a href="#" style={linkStyle} onClick={() => setMenuOpen(false)}>Chat</a>
-      <a href="#" style={linkStyle} onClick={() => setMenuOpen(false)}>About</a> */}
       {!loggedIn ? (
         <button style={buttonStyle} onClick={() => { setShowWelcome(false); setMenuOpen(false); }}>
           Login
         </button>
       ) : (
         <>
-          <span style={{ margin: isMobile ? "0.5rem 0" : "0", fontSize: isMobile ? "0.95rem" : "1rem" }}>
+          <span style={{ margin: isMobile ? "0.5rem 0" : "0" }}>
             Hi, {user}
           </span>
           <button
@@ -86,7 +74,7 @@ export default function Navbar({ user, loggedIn, setLoggedIn, setShowWelcome }: 
     <header style={navStyle}>
       <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
         <span>🌿</span>
-        <span style={{ fontWeight: "bold", fontSize: isMobile ? "1rem" : "1.25rem" }}>HerbalBot</span>
+        <strong>HerbalBot</strong>
       </div>
 
       {isMobile ? (
@@ -100,23 +88,19 @@ export default function Navbar({ user, loggedIn, setLoggedIn, setShowWelcome }: 
               fontSize: "1.5rem",
               cursor: "pointer",
             }}
-            aria-label="Toggle Menu"
           >
             ☰
           </button>
           {navLinks}
         </div>
       ) : (
-        <nav style={{ display: "flex", alignItems: "center" }}>
-          {navLinks}
-        </nav>
+        <nav>{navLinks}</nav>
       )}
     </header>
   );
 }
 
 const buttonStyle: React.CSSProperties = {
-  marginLeft: "1rem",
   backgroundColor: "#f97316",
   color: "white",
   padding: "0.5rem 1rem",
