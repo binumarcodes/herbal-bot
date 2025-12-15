@@ -9,15 +9,17 @@ type NavbarProps = {
 
 export default function Navbar({ user, loggedIn, setLoggedIn, setShowWelcome }: NavbarProps) {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [windowWidth, setWindowWidth] = useState(0);
+  // Remove this line
+const [windowWidth, setWindowWidth] = useState(0);
 
-  // ✅ SSR-safe window width
-  useEffect(() => {
-    setWindowWidth(window.innerWidth);
-    const handleResize = () => setWindowWidth(window.innerWidth);
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
+// And remove the useEffect that sets it:
+useEffect(() => {
+  setWindowWidth(window.innerWidth);
+  const handleResize = () => setWindowWidth(window.innerWidth);
+  window.addEventListener("resize", handleResize);
+  return () => window.removeEventListener("resize", handleResize);
+}, []);
+
 
   const isMobile = windowWidth < 768;
 
