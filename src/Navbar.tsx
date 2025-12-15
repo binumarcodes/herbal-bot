@@ -3,20 +3,15 @@ import { useState, useEffect } from "react";
 type NavbarProps = {
   user: string;
   loggedIn: boolean;
-  setLoggedIn: (v: boolean) => void;
-  setShowWelcome: (v: boolean) => void;
+  setLoggedIn: (value: boolean) => void;
+  setShowWelcome: (value: boolean) => void;
 };
 
-export default function Navbar({
-  user,
-  loggedIn,
-  setLoggedIn,
-  setShowWelcome
-}: NavbarProps) {
+export default function Navbar({ user, loggedIn, setLoggedIn, setShowWelcome }: NavbarProps) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [windowWidth, setWindowWidth] = useState(0);
 
-  // ✅ SSR-safe
+  // ✅ SSR-safe window width
   useEffect(() => {
     setWindowWidth(window.innerWidth);
     const handleResize = () => setWindowWidth(window.innerWidth);
@@ -29,34 +24,44 @@ export default function Navbar({
   const navStyle: React.CSSProperties = {
     background: "#16a34a",
     color: "white",
-    padding: "1rem",
     display: "flex",
     justifyContent: "space-between",
     alignItems: "center",
+    padding: isMobile ? "0.75rem 1rem" : "1rem 2rem",
+    boxShadow: "0 1px 3px rgba(0,0,0,0.1)",
     position: "sticky",
     top: 0,
-    zIndex: 20
+    zIndex: 20,
   };
 
   const navLinks = (
-    <div style={{
-      display: "flex",
-      flexDirection: isMobile ? "column" : "row",
-      alignItems: isMobile ? "flex-start" : "center",
-      gap: "0.75rem"
-    }}>
+    <div
+      style={{
+        display: isMobile ? (menuOpen ? "flex" : "none") : "flex",
+        flexDirection: isMobile ? "column" : "row",
+        position: isMobile ? "absolute" : "static",
+        top: isMobile ? "100%" : undefined,
+        right: isMobile ? 0 : undefined,
+        backgroundColor: isMobile ? "#16a34a" : undefined,
+        width: isMobile ? "100%" : "auto",
+        padding: isMobile ? "1rem" : undefined,
+        gap: "0.5rem",
+        alignItems: isMobile ? "flex-start" : "center",
+      }}
+    >
       {!loggedIn ? (
         <button style={buttonStyle} onClick={() => setShowWelcome(false)}>
           Login
         </button>
       ) : (
         <>
-          <span>Hi, {user}</span>
+          <span style={{ margin: isMobile ? "0.5rem 0" : "0" }}>Hi, {user}</span>
           <button
             style={buttonStyle}
             onClick={() => {
               setLoggedIn(false);
               setShowWelcome(true);
+              setMenuOpen(false);
             }}
           >
             Logout
@@ -74,20 +79,19 @@ export default function Navbar({
       </div>
 
       {isMobile ? (
-        <div>
+        <div style={{ position: "relative" }}>
           <button
             onClick={() => setMenuOpen(!menuOpen)}
             style={{
-              background: "none",
               border: "none",
               color: "white",
               fontSize: "1.5rem",
-              cursor: "pointer"
+              cursor: "pointer",
             }}
           >
             ☰
           </button>
-          {menuOpen && navLinks}
+          {navLinks}
         </div>
       ) : (
         <nav>{navLinks}</nav>
@@ -99,8 +103,8 @@ export default function Navbar({
 const buttonStyle: React.CSSProperties = {
   backgroundColor: "#f97316",
   color: "white",
-  border: "none",
   padding: "0.5rem 1rem",
   borderRadius: "0.5rem",
-  cursor: "pointer"
+  border: "none",
+  cursor: "pointer",
 };

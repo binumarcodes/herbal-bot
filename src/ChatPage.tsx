@@ -73,26 +73,27 @@ export default function ChatPage({ user, chat, setChat, logout }: ChatPageProps)
     );
   };
 
-  const generateBotResponse = (userInput: string) => {
-    if (isGreeting(userInput)) {
+  const generateBotResponse = (input: string) => {
+    if (isGreeting(input)) {
       return `👋 Hello ${user}! Please tell me your symptom.`;
     }
 
-    const matchedHerbs = searchHerbsBySymptom(userInput);
+    const matches = searchHerbsBySymptom(input);
 
-    if (matchedHerbs.length > 0) {
-      let response = `🌿 **Herbal remedies for your condition:**\n\n`;
-      matchedHerbs.forEach(h => {
-        response += `🔹 Scientific Name: ${h.name}\n`;
-        response += `🔹 Local Name: ${h.local_name}\n`;
-        response += `🔹 Uses: ${h.uses.join(", ")}\n`;
-        response += `🔹 How to Use: ${h.notes}\n`;
-        response += `🔹 Caution: Use in moderation.\n\n`;
-      });
-      return response.trim();
+    if (matches.length === 0) {
+      return `🤔 I couldn't find a herb for that. Try headache, fever, cough, stomach pain, body ache.`;
     }
 
-    return `🤔 I couldn't find a herb for that. Try headache, fever, cough, stomach pain, body ache.`;
+    let response = `🌿 **Herbal remedies for your condition:**\n\n`;
+    matches.forEach(h => {
+      response += `🔹 Scientific Name: ${h.name}\n`;
+      response += `🔹 Local Name: ${h.local_name}\n`;
+      response += `🔹 Uses: ${h.uses.join(", ")}\n`;
+      response += `🔹 How to Use: ${h.notes}\n`;
+      response += `🔹 Caution: Use in moderation.\n\n`;
+    });
+
+    return response.trim();
   };
 
   /* ---------------- INTAKE FLOW ---------------- */
@@ -100,21 +101,21 @@ export default function ChatPage({ user, chat, setChat, logout }: ChatPageProps)
   const handleIntakeFlow = (input: string) => {
     switch (intakeStep) {
       case "gender":
-        setIntakeData(prev => ({ ...prev, gender: input }));
+        setIntakeData(p => ({ ...p, gender: input }));
         setIntakeStep("age");
         return "How old are you?";
 
       case "age":
-        setIntakeData(prev => ({ ...prev, age: input }));
+        setIntakeData(p => ({ ...p, age: input }));
         setIntakeStep("duration");
-        return "For how long have you been feeling this? (e.g 2 days, 1 week)";
+        return "For how long have you been feeling this?";
 
       case "duration":
-        setIntakeData(prev => ({ ...prev, duration: input }));
+        setIntakeData(p => ({ ...p, duration: input }));
         setIntakeStep("bodyPart");
-        return "Which part exactly? (e.g Head – left/right, Stomach – upper/lower)";
+        return "Which part exactly?";
 
-      case "bodyPart":
+      case "bodyPart": {
         const finalData = { ...intakeData, bodyPart: input };
         setIntakeData(finalData);
         setIntakeStep("done");
@@ -127,6 +128,7 @@ export default function ChatPage({ user, chat, setChat, logout }: ChatPageProps)
           `• Location: ${finalData.bodyPart}\n\n` +
           generateBotResponse(pendingSymptom || "")
         );
+      }
 
       default:
         return "";
@@ -139,23 +141,22 @@ export default function ChatPage({ user, chat, setChat, logout }: ChatPageProps)
     e.preventDefault();
     if (!message.trim()) return;
 
-    setChat(prev => [...prev, { sender: "user", text: message }]);
+    setChat(p => [...p, { sender: "user", text: message }]);
     setMessage("");
     setTyping(true);
 
     setTimeout(() => {
-      let botReply = "";
+      const reply =
+        intakeStep !== "none" && intakeStep !== "done"
+          ? handleIntakeFlow(message)
+          : (() => {
+              setPendingSymptom(message);
+              setIntakeData({});
+              setIntakeStep("gender");
+              return "Before I suggest herbs 🌿, please tell me your **gender**.";
+            })();
 
-      if (intakeStep !== "none" && intakeStep !== "done") {
-        botReply = handleIntakeFlow(message);
-      } else {
-        setPendingSymptom(message);
-        setIntakeData({});
-        setIntakeStep("gender");
-        botReply = "Before I suggest herbs 🌿, please tell me your **gender** (Male / Female).";
-      }
-
-      setChat(prev => [...prev, { sender: "bot", text: botReply }]);
+      setChat(p => [...p, { sender: "bot", text: reply }]);
       setTyping(false);
     }, 700);
   };
@@ -164,39 +165,25 @@ export default function ChatPage({ user, chat, setChat, logout }: ChatPageProps)
 
   return (
     <div style={{ display: "flex", flexDirection: "column", height: "100vh", background: "#f0fdf4" }}>
-      <header style={{
-        background: "#16a34a",
-        color: "#fff",
-        padding: "1rem",
-        display: "flex",
-        justifyContent: "space-between",
-        alignItems: "center"
-      }}>
+      <header style={{ background: "#16a34a", color: "#fff", padding: "1rem", display: "flex", justifyContent: "space-between" }}>
         <strong>🌿 Herbal Chatbot</strong>
-        <button onClick={logout} style={{
-          background: "#f97316",
-          border: "none",
-          padding: "0.5rem 1rem",
-          borderRadius: "0.5rem",
-          color: "#fff",
-          cursor: "pointer"
-        }}>
+        <button onClick={logout} style={{ background: "#f97316", color: "#fff", border: "none", padding: "0.5rem 1rem", borderRadius: "0.5rem" }}>
           Logout
         </button>
       </header>
 
       <main style={{ flex: 1, overflowY: "auto", padding: "1rem" }}>
-        {chat.map((msg, i) => (
+        {chat.map((m, i) => (
           <div key={i} style={{
-            alignSelf: msg.sender === "user" ? "flex-end" : "flex-start",
-            background: msg.sender === "user" ? "#d1fae5" : "#e0f2fe",
+            alignSelf: m.sender === "user" ? "flex-end" : "flex-start",
+            background: m.sender === "user" ? "#d1fae5" : "#e0f2fe",
             padding: "0.75rem 1rem",
             borderRadius: "16px",
             marginBottom: "0.5rem",
             maxWidth: "75%",
             whiteSpace: "pre-line"
           }}>
-            {msg.text}
+            {m.text}
           </div>
         ))}
         {typing && <em>Typing...</em>}
@@ -204,19 +191,8 @@ export default function ChatPage({ user, chat, setChat, logout }: ChatPageProps)
       </main>
 
       <form onSubmit={handleSend} style={{ display: "flex", padding: "1rem", gap: "0.5rem" }}>
-        <input
-          value={message}
-          onChange={e => setMessage(e.target.value)}
-          placeholder="Type here..."
-          style={{ flex: 1, padding: "0.75rem", borderRadius: "1rem", border: "1px solid #ccc" }}
-        />
-        <button type="submit" style={{
-          background: "#16a34a",
-          color: "#fff",
-          border: "none",
-          padding: "0 1.5rem",
-          borderRadius: "1rem"
-        }}>
+        <input value={message} onChange={e => setMessage(e.target.value)} style={{ flex: 1, padding: "0.75rem" }} />
+        <button type="submit" style={{ background: "#16a34a", color: "#fff", padding: "0 1.5rem", borderRadius: "1rem", border: "none" }}>
           Send
         </button>
       </form>
