@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import herbData from "./data/herbs.json";
 
 /* ---------------- TYPES ---------------- */
@@ -37,9 +37,6 @@ export default function ChatPage({ user, chat, setChat, logout }: ChatPageProps)
   const [message, setMessage] = useState("");
   const [typing, setTyping] = useState(false);
 
-  // ✅ SSR-safe
-  const [windowWidth, setWindowWidth] = useState(0);
-
   const [intakeStep, setIntakeStep] = useState<IntakeStep>("none");
   const [intakeData, setIntakeData] = useState<IntakeData>({});
   const [pendingSymptom, setPendingSymptom] = useState<string | null>(null);
@@ -47,13 +44,6 @@ export default function ChatPage({ user, chat, setChat, logout }: ChatPageProps)
   const chatEndRef = useRef<HTMLDivElement>(null);
 
   /* ---------------- EFFECTS ---------------- */
-
-  useEffect(() => {
-    setWindowWidth(window.innerWidth);
-    const handleResize = () => setWindowWidth(window.innerWidth);
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
 
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: "smooth" });

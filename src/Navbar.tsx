@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 type NavbarProps = {
   user: string;
@@ -9,19 +9,8 @@ type NavbarProps = {
 
 export default function Navbar({ user, loggedIn, setLoggedIn, setShowWelcome }: NavbarProps) {
   const [menuOpen, setMenuOpen] = useState(false);
-  // Remove this line
-const [windowWidth, setWindowWidth] = useState(0);
 
-// And remove the useEffect that sets it:
-useEffect(() => {
-  setWindowWidth(window.innerWidth);
-  const handleResize = () => setWindowWidth(window.innerWidth);
-  window.addEventListener("resize", handleResize);
-  return () => window.removeEventListener("resize", handleResize);
-}, []);
-
-
-  const isMobile = windowWidth < 768;
+  const isMobile = window.innerWidth < 768;
 
   const navStyle: React.CSSProperties = {
     background: "#16a34a",
