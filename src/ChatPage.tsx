@@ -36,7 +36,9 @@ type IntakeStep = "none" | "gender" | "age" | "duration" | "bodyPart" | "done";
 export default function ChatPage({ user, chat, setChat, logout }: ChatPageProps) {
   const [message, setMessage] = useState("");
   const [typing, setTyping] = useState(false);
-  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+
+  // ✅ SSR-safe
+  const [windowWidth, setWindowWidth] = useState(0);
 
   const [intakeStep, setIntakeStep] = useState<IntakeStep>("none");
   const [intakeData, setIntakeData] = useState<IntakeData>({});
@@ -47,6 +49,7 @@ export default function ChatPage({ user, chat, setChat, logout }: ChatPageProps)
   /* ---------------- EFFECTS ---------------- */
 
   useEffect(() => {
+    setWindowWidth(window.innerWidth);
     const handleResize = () => setWindowWidth(window.innerWidth);
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
@@ -76,6 +79,7 @@ export default function ChatPage({ user, chat, setChat, logout }: ChatPageProps)
     }
 
     const matchedHerbs = searchHerbsBySymptom(userInput);
+
     if (matchedHerbs.length > 0) {
       let response = `🌿 **Herbal remedies for your condition:**\n\n`;
       matchedHerbs.forEach(h => {
@@ -88,7 +92,7 @@ export default function ChatPage({ user, chat, setChat, logout }: ChatPageProps)
       return response.trim();
     }
 
-    return `🤔 I couldn't find a herb for that. Try symptoms like headache, fever, cough, stomach pain, body ache.`;
+    return `🤔 I couldn't find a herb for that. Try headache, fever, cough, stomach pain, body ache.`;
   };
 
   /* ---------------- INTAKE FLOW ---------------- */
@@ -115,15 +119,13 @@ export default function ChatPage({ user, chat, setChat, logout }: ChatPageProps)
         setIntakeData(finalData);
         setIntakeStep("done");
 
-        const herbResponse = generateBotResponse(pendingSymptom || "");
-
         return (
           `🧾 **Details recorded:**\n` +
           `• Gender: ${finalData.gender}\n` +
           `• Age: ${finalData.age}\n` +
           `• Duration: ${finalData.duration}\n` +
           `• Location: ${finalData.bodyPart}\n\n` +
-          herbResponse
+          generateBotResponse(pendingSymptom || "")
         );
 
       default:
@@ -155,14 +157,13 @@ export default function ChatPage({ user, chat, setChat, logout }: ChatPageProps)
 
       setChat(prev => [...prev, { sender: "bot", text: botReply }]);
       setTyping(false);
-    }, 800);
+    }, 700);
   };
 
   /* ---------------- UI ---------------- */
 
   return (
     <div style={{ display: "flex", flexDirection: "column", height: "100vh", background: "#f0fdf4" }}>
-      {/* Header */}
       <header style={{
         background: "#16a34a",
         color: "#fff",
@@ -184,7 +185,6 @@ export default function ChatPage({ user, chat, setChat, logout }: ChatPageProps)
         </button>
       </header>
 
-      {/* Messages */}
       <main style={{ flex: 1, overflowY: "auto", padding: "1rem" }}>
         {chat.map((msg, i) => (
           <div key={i} style={{
@@ -203,7 +203,6 @@ export default function ChatPage({ user, chat, setChat, logout }: ChatPageProps)
         <div ref={chatEndRef} />
       </main>
 
-      {/* Input */}
       <form onSubmit={handleSend} style={{ display: "flex", padding: "1rem", gap: "0.5rem" }}>
         <input
           value={message}
