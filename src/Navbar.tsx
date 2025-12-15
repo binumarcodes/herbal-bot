@@ -54,10 +54,10 @@ export default function Navbar({ user, loggedIn, setLoggedIn, setShowWelcome }: 
         alignItems: isMobile ? "flex-start" : "center",
       }}
     >
-      <a href="#" style={linkStyle} onClick={() => { setShowWelcome(true); setMenuOpen(false); }}>Home</a>
+      {/* <a href="#" style={linkStyle} onClick={() => { setShowWelcome(true); setMenuOpen(false); }}>Home</a>
       <a href="#" style={linkStyle} onClick={() => setMenuOpen(false)}>Herbs</a>
       <a href="#" style={linkStyle} onClick={() => setMenuOpen(false)}>Chat</a>
-      <a href="#" style={linkStyle} onClick={() => setMenuOpen(false)}>About</a>
+      <a href="#" style={linkStyle} onClick={() => setMenuOpen(false)}>About</a> */}
       {!loggedIn ? (
         <button style={buttonStyle} onClick={() => { setShowWelcome(false); setMenuOpen(false); }}>
           Login
